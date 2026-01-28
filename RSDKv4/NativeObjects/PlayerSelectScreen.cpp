@@ -233,7 +233,11 @@ void PlayerSelectScreen_Main(void *objPtr)
                 SetGlobalVariableByName("lampPostID", 0);
                 SetGlobalVariableByName("starPostID", 0);
 #if RETRO_USE_V6
-                SetGlobalVariableByName("specialStage.timeStones", 0);
+                if (Engine.gameType == GAME_SONICCD){
+                SetGlobalVariableByName("specialStage.timeStones",0);
+                SetGlobalVariableByName("lampPostID",0);
+                SetGlobalVariableByName("starPostID",0);
+                }
 #endif
                 debugMode = false;
 
@@ -390,14 +394,32 @@ void PlayerSelectScreen_Main(void *objPtr)
     NewRenderState();
     SetRenderMatrix(NULL);
     SetRenderVertexColor(0xFF, 0xFF, 0xFF);
+
+#if RETRO_USE_V6
+    // i hate this logic so much aaaaaa
+    // this is RifiGD, uhmm going mentally insane thanks to RSDKv6 2018
+    int backButtonAlpha = 0;
+
+    // who the fuck designed this revision of the native objects
+    // whoever it is, i WILL find you
+    if (Engine.gameDeviceType == RETRO_MOBILE)
+        backButtonAlpha = 255;
+
     if (self->backPressed){
-        #if !RETRO_USE_V6
-        RenderImage(128.0, -92.0, 160.0, 0.3, 0.3, 64.0, 64.0, 128.0, 128.0, 128.0, 128.0, self->alpha, self->textureArrows);
-        #endif
+        RenderImage(128.0, -92.0, 160.0, 0.3, 0.3, 64.0, 64.0, 128.0, 128.0, 128.0, 128.0, backButtonAlpha, self->textureArrows);
+
     }
     else{
-        #if !RETRO_USE_V6
-        RenderImage(128.0, -92.0, 160.0, 0.3, 0.3, 64.0, 64.0, 128.0, 128.0, 128.0, 0.0, self->alpha, self->textureArrows);
-        #endif
+        RenderImage(128.0, -92.0, 160.0, 0.3, 0.3, 64.0, 64.0, 128.0, 128.0, 128.0, 0.0, backButtonAlpha, self->textureArrows);
     }
+#else 
+
+    if (self->backPressed){
+        RenderImage(128.0, -92.0, 160.0, 0.3, 0.3, 64.0, 64.0, 128.0, 128.0, 128.0, 128.0, self->alpha, self->textureArrows);
+
+    }
+    else{
+        RenderImage(128.0, -92.0, 160.0, 0.3, 0.3, 64.0, 64.0, 128.0, 128.0, 128.0, 0.0, self->alpha, self->textureArrows);
+    }
+#endif
 }

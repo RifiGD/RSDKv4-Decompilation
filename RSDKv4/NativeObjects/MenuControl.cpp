@@ -43,11 +43,8 @@ void MenuControl_Create(void *objPtr)
 #endif
 
     self->backButton          = CREATE_ENTITY(BackButton);
-    #if RETRO_USE_V6
-    self->backButton->visible = false;
-    #else
     self->backButton->visible = true;
-    #endif
+
     self->backButton->x       = 240.0;
     self->backButton->y       = -160.0;
     self->backButton->z       = 0.0;
@@ -77,8 +74,10 @@ void MenuControl_Create(void *objPtr)
     if (Engine.gameDeviceType == RETRO_STANDARD)
         usePhysicalControls = true;
     BackupNativeObjects();
-    #if RETRO_USE_V6 //I had to do this because resetting to this native object wasnt fully replicating the behavior
+    #if RETRO_USE_V6
     self->state = MENUCONTROL_STATE_ACTION;
+    ClearTouches();
+    self->stateInput = MENUCONTROL_STATEINPUT_CHECKTOUCH;
     #endif
 }
 void MenuControl_Main(void *objPtr)
@@ -356,6 +355,8 @@ void MenuControl_Main(void *objPtr)
                     #else
                         
                         if (Engine.gameType == GAME_SONICCD){
+                            self->state             = MENUCONTROL_STATE_MAIN;
+                            button->labelPtr->state = TEXTLABEL_STATE_IDLE;
                             //it also sets these variables
                             SetGlobalVariableByName("options.gameMode",2);
                             SetGlobalVariableByName("options.saveSlot",0);
@@ -366,7 +367,7 @@ void MenuControl_Main(void *objPtr)
                             SetGlobalVariableByName("specialStage.emeralds",0);
                             SetGlobalVariableByName("specialStage.timeStones",0);
                             SetGlobalVariableByName("specialStage.nextZone",0);
-                            SetGlobalVariableByName("timeAttack.round",0xffffffff);
+                            SetGlobalVariableByName("timeAttack.round",0xffffffff); 
                             SetGlobalVariableByName("timeAttack.result",0);
                             SetGlobalVariableByName("timeAttack.zone",0);
                             SetGlobalVariableByName("lampPostID",0);

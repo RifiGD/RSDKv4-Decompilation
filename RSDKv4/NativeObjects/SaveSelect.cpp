@@ -52,7 +52,6 @@ void SaveSelect_Create(void *objPtr)
     float y = 18.0;
     for (int i = SAVESELECT_BUTTON_SAVE1; i < SAVESELECT_BUTTON_COUNT; ++i) {
         self->saveButtons[i] = CREATE_ENTITY(SubMenuButton);
-
         int stagePos = saveGame->files[i - 1].stageID;
         if (stagePos >= 0x80) {
             SetStringToFont(self->saveButtons[i]->text, strSaveStageList[saveGame->files[i - 1].specialStageID + 19], FONT_LABEL);
@@ -89,6 +88,7 @@ void SaveSelect_Create(void *objPtr)
         y -= 30.0;
     }
 }
+
 void SaveSelect_Main(void *objPtr)
 {
     RSDK_THIS(SaveSelect);

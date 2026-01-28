@@ -92,6 +92,7 @@ void StartGameButton_Main(void *objPtr)
 {
     RSDK_THIS(StartGameButton);
     if (self->prevRegion != Engine.globalBoxRegion) {
+    #if !RETRO_USE_V6
         int package = 0;
         switch (Engine.globalBoxRegion) {
             case REGION_JP:
@@ -108,6 +109,9 @@ void StartGameButton_Main(void *objPtr)
                 break;
         }
         self->prevRegion = Engine.globalBoxRegion;
+    #else
+        loadCartridgeValue(objPtr);
+    #endif
     }
 
     if (self->visible) {

@@ -5346,7 +5346,11 @@ void ProcessScript(int scriptCodeStart, int jumpTableStart, byte scriptEvent)
 #if !RETRO_REV02
                 LoadTextFile(menu, scriptText, scriptEng.operands[2] != 0);
 #else
+#if ! RETRO_USE_V6
                 LoadTextFile(menu, scriptText, false);
+#else
+                LoadTextFile(menu, scriptText, false);
+#endif
 #endif
                 break;
             }

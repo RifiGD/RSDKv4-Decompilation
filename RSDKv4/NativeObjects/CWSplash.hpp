@@ -1,8 +1,11 @@
 #ifndef NATIVE_CWSPLASH_H
 #define NATIVE_CWSPLASH_H
 
+#if !RETRO_USE_V6
 enum CWSplashStates { CWSPLASH_STATE_ENTER, CWSPLASH_STATE_EXIT, CWSPLASH_STATE_SPAWNTITLE };
-
+#else
+enum CWSplashStates { CWSPLASH_STATE_ENTER, CWSPLASH_STATE_EXIT, CWSPLASH_STATE_SPAWNTITLE, CWSPLASH_STATE_8 = 8 };
+#endif
 struct NativeEntity_CWSplash : NativeEntityBase {
     CWSplashStates state;
     float rectAlpha;

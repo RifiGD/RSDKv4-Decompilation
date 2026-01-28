@@ -615,6 +615,7 @@ void SetTextMenu(int sm)
             AddTextMenuEntry(&gameMenu[0], "START GAME");
             AddTextMenuEntry(&gameMenu[0], " ");
             AddTextMenuEntry(&gameMenu[0], "STAGE SELECT");
+#if !RETRO_USE_V6
 #if !RETRO_USE_ORIGINAL_CODE
             AddTextMenuEntry(&gameMenu[0], " ");
             AddTextMenuEntry(&gameMenu[0], "START MENU");
@@ -624,6 +625,7 @@ void SetTextMenu(int sm)
 #endif
             AddTextMenuEntry(&gameMenu[0], " ");
             AddTextMenuEntry(&gameMenu[0], "EXIT GAME");
+#endif
 #endif
             gameMenu[0].alignment        = 2;
             gameMenu[0].selectionCount   = 2;

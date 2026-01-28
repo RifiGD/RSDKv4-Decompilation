@@ -149,6 +149,11 @@ extern bool useSGame;
 bool ReadSaveRAMData();
 bool WriteSaveRAMData();
 
+#if RETRO_USE_V6
+// Save File offset function for handling multiple save files
+int GET_IDX_SO(int offset);
+#endif
+
 #if !RETRO_USE_ORIGINAL_CODE
 void InitUserdata();
 void WriteSettings();

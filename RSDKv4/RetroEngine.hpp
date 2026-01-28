@@ -20,7 +20,7 @@
 
 // Forces all DLC flags to be disabled, this should be enabled in any public releases
 #ifndef RSDK_AUTOBUILD
-#define RSDK_AUTOBUILD (0)
+#define RSDK_AUTOBUILD (1)
 #endif
 
 // ================
@@ -220,9 +220,18 @@ typedef unsigned int uint;
 
 #endif
 
+// Whether or not the HW Menus will use the version used in SEGA Classics (2018) application for Amazon Fire TV
+#ifndef RETRO_USE_V6
+#define RETRO_USE_V6 (1)
+#endif
+
 // Determines which revision to use (see defines below for specifics). Datafiles from REV00 and REV01 builds will not work on later revisions and vice versa.
 #ifndef RSDK_REVISION
-#define RSDK_REVISION (3)
+#if !RETRO_USE_V6
+#define RSDK_REVISION (3) // set it your own here, defaults to Origins
+#else
+#define RSDK_REVISION (2) // force REV02
+#endif
 #endif
 
 // Revision from early versions of Sonic 1
@@ -237,10 +246,6 @@ typedef unsigned int uint;
 // Revision included as part of RSDKv5U (Sonic Origins)
 #define RETRO_REV03 (RSDK_REVISION >= 3)
 
-// Whether or not the HW Menus will use the version used in SEGA Classics (2018) application for Amazon Fire TV
-#ifndef RETRO_USE_V6
-#define RETRO_USE_V6 (0)
-#endif
 
 enum RetroLanguages {
     RETRO_EN = 0,

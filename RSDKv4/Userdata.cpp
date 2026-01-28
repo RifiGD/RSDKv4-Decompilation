@@ -42,6 +42,7 @@ int disableFocusPause_Config = 0;
 
 bool useSGame = false;
 
+#if !RETRO_USE_V6
 bool ReadSaveRAMData()
 {
     useSGame = false;
@@ -113,7 +114,94 @@ bool ReadSaveRAMData()
     fClose(saveFile);
     return true;
 }
+#else
+bool ReadSaveRAMData()
+{
+    useSGame = true;
+    char buffer[0x180];
+#if RETRO_USE_MOD_LOADER
+#if RETRO_PLATFORM == RETRO_UWP
+    if (!usingCWD)
+        sprintf(buffer, "%s/%sSData.bin", redirectSave ? modsPath : getResourcesPath(), savePath);
+    else
+        sprintf(buffer, "%s%sSData.bin", redirectSave ? modsPath : gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_OSX
+    sprintf(buffer, "%s/%sSData.bin", redirectSave ? modsPath : gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_iOS
+    sprintf(buffer, "%s/%sSData.bin", redirectSave ? modsPath : getDocumentsPath(), savePath);
+#else
+    //sprintf(buffer, "%s%sSData.bin", redirectSave ? modsPath : gamePath, savePath);
+#endif
+#else
+#if RETRO_PLATFORM == RETRO_UWP
+    if (!usingCWD)
+        sprintf(buffer, "%s/%sSData.bin", getResourcesPath(), savePath);
+    else
+        sprintf(buffer, "%s%sSData.bin", gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_OSX
+    sprintf(buffer, "%s/%sSData.bin", gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_iOS
+    sprintf(buffer, "%s/%sSData.bin", getDocumentsPath(), savePath);
+#else
+    sprintf(buffer, "%s%sSData.bin", gamePath, savePath);
+#endif
+#endif
 
+    FileIO *saveFile = fOpen(buffer, "rb");
+    if (!saveFile) {
+#if RETRO_USE_MOD_LOADER
+#if RETRO_PLATFORM == RETRO_UWP
+        if (!usingCWD)
+            sprintf(buffer, "%s/%sSGame.bin", redirectSave ? modsPath : getResourcesPath(), savePath);
+        else
+            sprintf(buffer, "%s%sSGame.bin", redirectSave ? modsPath : gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_OSX
+        sprintf(buffer, "%s/%sSGame.bin", redirectSave ? modsPath : gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_iOS
+        sprintf(buffer, "%s/%sSGame.bin", redirectSave ? modsPath : getDocumentsPath(), savePath);
+#else
+        switch(Engine.gameType){
+            case GAME_SONIC1:
+            sprintf(buffer, "%s%sSGame_So1.bin", redirectSave ? modsPath : gamePath, savePath);
+            break; 
+            case GAME_SONIC2:
+            sprintf(buffer, "%s%sSGame_So2.bin", redirectSave ? modsPath : gamePath, savePath);
+            break;
+            case GAME_SONICCD:
+            sprintf(buffer, "%s%sSGame_SoCD.bin", redirectSave ? modsPath : gamePath, savePath);
+            break;
+            default:
+            sprintf(buffer, "%s%sSGame.bin", redirectSave ? modsPath : gamePath, savePath);
+            break;
+        }
+#endif
+#else
+#if RETRO_PLATFORM == RETRO_UWP
+        if (!usingCWD)
+            sprintf(buffer, "%s/%sSGame.bin", getResourcesPath(), savePath);
+        else
+            sprintf(buffer, "%s%sSGame.bin", gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_OSX
+        sprintf(buffer, "%s/%sSGame.bin", gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_iOS
+        sprintf(buffer, "%s/%sSGame.bin", getDocumentsPath(), savePath);
+#else
+        sprintf(buffer, "%s%sSGame.bin", gamePath, savePath);
+#endif
+#endif
+
+        saveFile = fOpen(buffer, "rb");
+        if (!saveFile)
+            return false;
+        useSGame = true;
+    }
+    fRead(saveRAM, sizeof(int), SAVEDATA_SIZE, saveFile);
+    fClose(saveFile);
+    return true;
+}
+#endif
+
+#if !RETRO_USE_V6
 bool WriteSaveRAMData()
 {
     char buffer[0x180];
@@ -184,6 +272,175 @@ bool WriteSaveRAMData()
     fClose(saveFile);
     return true;
 }
+#else
+bool WriteSaveRAMData()
+{
+    char buffer[0x180];
+
+    if (!useSGame) {
+#if RETRO_USE_MOD_LOADER
+#if RETRO_PLATFORM == RETRO_UWP
+        if (!usingCWD)
+            sprintf(buffer, "%s/%sSData.bin", redirectSave ? modsPath : getResourcesPath(), savePath);
+        else
+            sprintf(buffer, "%s%sSData.bin", redirectSave ? modsPath : gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_OSX
+        sprintf(buffer, "%s/%sSData.bin", redirectSave ? modsPath : gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_iOS
+        sprintf(buffer, "%s/%sSData.bin", redirectSave ? modsPath : getDocumentsPath(), savePath);
+#else
+        sprintf(buffer, "%s%sSData.bin", redirectSave ? modsPath : gamePath, savePath);
+#endif
+#else
+#if RETRO_PLATFORM == RETRO_UWP
+        if (!usingCWD)
+            sprintf(buffer, "%s/%sSData.bin", getResourcesPath(), savePath);
+        else
+            sprintf(buffer, "%s%sSData.bin", gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_OSX
+        sprintf(buffer, "%s/%sSData.bin", gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_iOS
+        sprintf(buffer, "%s/%sSData.bin", getDocumentsPath(), savePath);
+#else
+        sprintf(buffer, "%s%sSData.bin", gamePath, savePath);
+#endif
+#endif
+    }
+    else {
+#if RETRO_USE_MOD_LOADER
+#if RETRO_PLATFORM == RETRO_UWP
+        if (!usingCWD)
+            sprintf(buffer, "%s/%sSGame.bin", redirectSave ? modsPath : getResourcesPath(), savePath);
+        else
+            sprintf(buffer, "%s%sSGame.bin", redirectSave ? modsPath : gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_OSX
+        sprintf(buffer, "%s/%sSGame.bin", redirectSave ? modsPath : gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_iOS
+        sprintf(buffer, "%s/%sSGame.bin", redirectSave ? modsPath : getDocumentsPath(), savePath);
+#else
+        switch(Engine.gameType){
+            case GAME_SONIC1:
+            sprintf(buffer, "%s%sSGame_So1.bin", redirectSave ? modsPath : gamePath, savePath);
+            break;
+            case GAME_SONIC2:
+            sprintf(buffer, "%s%sSGame_So2.bin", redirectSave ? modsPath : gamePath, savePath);
+            break;
+            case GAME_SONICCD:
+            sprintf(buffer, "%s%sSGame_SoCD.bin", redirectSave ? modsPath : gamePath, savePath);
+            break;
+            default:
+            sprintf(buffer, "%s%sSGame.bin", redirectSave ? modsPath : gamePath, savePath);
+            break;
+        }
+#endif
+#else
+#if RETRO_PLATFORM == RETRO_UWP
+        if (!usingCWD)
+            sprintf(buffer, "%s/%sSGame.bin", getResourcesPath(), savePath);
+        else
+            sprintf(buffer, "%s%sSGame.bin", gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_OSX
+        sprintf(buffer, "%s/%sSGame.bin", gamePath, savePath);
+#elif RETRO_PLATFORM == RETRO_iOS
+        sprintf(buffer, "%s/%sSGame.bin", getDocumentsPath(), savePath);
+#else
+        sprintf(buffer, "%s%sSGame.bin", gamePath, savePath);
+#endif
+#endif
+    }
+
+    FileIO *saveFile = fOpen(buffer, "wb");
+    if (!saveFile)
+        return false;
+    fWrite(saveRAM, sizeof(int), SAVEDATA_SIZE, saveFile);
+    fClose(saveFile);
+    return true;
+}
+#endif
+
+#if RETRO_USE_V6
+// fuckass function :broken_heart:
+int GET_IDX_SO(int offset){
+    switch(offset){
+        case 0:
+        case 1:
+        case 2:
+            return offset;
+        case 3:
+            offset = 3;
+            if (Engine.gameType == GAME_SONICCD){
+                offset = 6;
+            }
+        return offset;
+            case 4:
+            offset = 4;
+            if (Engine.gameType == GAME_SONICCD){
+                offset = 3;
+            }
+            return offset;
+        case 5:
+            offset = 5;
+            if (Engine.gameType == GAME_SONICCD){
+                offset = 4;
+            }
+            return offset;
+        case 6:
+            offset = 6;
+            if (Engine.gameType == GAME_SONICCD){
+                offset = 5;
+            }
+            return offset;
+        case 7:
+            offset = 0x2d;
+            if (Engine.gameType == GAME_SONICCD){
+                offset = 0x27;
+            }
+            return offset;
+        case 0x13:
+            return 7;
+    }
+
+    if (offset - 8 < 7){
+        offset += 0x1c;
+        if (Engine.gameType == GAME_SONICCD){
+            offset = 1000;
+        }
+        return offset;
+    }
+
+    switch(offset - 0xf){
+    case 0:
+        offset = 1000;
+        if (Engine.gameType == GAME_SONICCD){
+            offset = 0x26;
+        }
+        return offset;
+        case 1:
+            offset = 0x2b;
+            if (Engine.gameType == GAME_SONICCD){
+                offset = 0x24;
+            }
+            return offset;
+
+        case 2:
+            offset = 0x2c;
+            if (Engine.gameType == GAME_SONICCD){
+                offset = 1000;
+            }
+            return offset;
+
+        case 3:
+            offset = 1000;
+            if (Engine.gameType == GAME_SONIC2){
+                offset = 0x2e;
+            }
+            return offset;
+
+        default:
+            return offset - 0xf;
+    }
+}
+#endif
 
 void InitUserdata()
 {
@@ -246,8 +503,11 @@ void InitUserdata()
         ini.SetInteger("Dev", "FastForwardSpeed", Engine.fastForwardSpeed = 8);
         Engine.startList_Game  = Engine.startList;
         Engine.startStage_Game = Engine.startStage;
-
+        #if !RETRO_USE_V6
         ini.SetBool("Dev", "UseHQModes", Engine.useHQModes = true);
+        #else
+        ini.SetBool("Dev", "UseHQModes", Engine.useHQModes = false);
+        #endif
         ini.SetString("Dev", "DataFile", (char *)"Data.rsdk");
         StrCopy(Engine.dataFile[0], "Data.rsdk");
         if (!StrComp(Engine.dataFile[1], "")) {

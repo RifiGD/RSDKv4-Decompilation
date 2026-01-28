@@ -98,6 +98,8 @@ void CWSplash_Create(void *objPtr)
     self->rectAlpha = 320.0;
     self->textureID = LoadTexture("Data/Game/Menu/CWLogo.png", TEXFMT_RGBA8888);
 }
+
+#if ! RETRO_USE_V6
 void CWSplash_Main(void *objPtr)
 {
     RSDK_THIS(CWSplash);
@@ -105,8 +107,10 @@ void CWSplash_Main(void *objPtr)
     switch (self->state) {
         case CWSPLASH_STATE_ENTER:
             self->rectAlpha -= 300.0 * Engine.deltaTime;
-            if (self->rectAlpha < -320.0)
+            if (self->rectAlpha < -320.0){
                 self->state = CWSPLASH_STATE_EXIT;
+
+            }
             SetRenderBlendMode(RENDER_BLEND_ALPHA);
             RenderRect(-SCREEN_CENTERX_F, SCREEN_CENTERY_F, 160.0, SCREEN_XSIZE_F, SCREEN_YSIZE_F, 0xFF, 0x90, 0x00, 0xFF);
             SetRenderBlendMode(RENDER_BLEND_ALPHA);
@@ -123,18 +127,40 @@ void CWSplash_Main(void *objPtr)
             RenderImage(0.0, 0.0, 160.0, 0.25, 0.25, 512.0, 256.0, 1024.0, 512.0, 0.0, 0.0, 255, self->textureID);
             RenderRect(-SCREEN_CENTERX_F, SCREEN_CENTERY_F, 160.0, SCREEN_XSIZE_F, SCREEN_YSIZE_F, 0, 0, 0, self->rectAlpha);
             break;
-#if RETRO_USE_V6
-        case CWSPLASH_STATE_SPAWNTITLE: 
-        #if RETRO_USE_V6
-            //actually used in v6
-            loadTextureAll();
-            ResetNativeObject(self, MenuControl_Create, MenuControl_Main); 
-        #else
-            ResetNativeObject(self, TitleScreen_Create, TitleScreen_Main);
-        #endif
-        break;
-#else
+
         case CWSPLASH_STATE_SPAWNTITLE: ResetNativeObject(self, TitleScreen_Create, TitleScreen_Main); break;
-#endif
+
     }
 }
+#else
+void CWSplash_Main(void *objPtr)
+{
+    RSDK_THIS(CWSplash);
+    // i decided to rewrite the logic to match the Ghidra output
+    if (self->state == CWSPLASH_STATE_ENTER){
+        self->rectAlpha -= 300.0 * Engine.deltaTime;
+        if (self->rectAlpha < -320.0) {
+            ClearTextures(true);
+            self->textureID = LoadTexture("Data/Game/Menu/CWLogo.png", TEXFMT_RGBA8888);
+            loadTextureAll();
+            self->state = CWSPLASH_STATE_SPAWNTITLE;
+}
+
+    }
+    else if (self->state == CWSPLASH_STATE_SPAWNTITLE){
+        self->rectAlpha += 300.0 * Engine.deltaTime;
+        if (512.0 < self->rectAlpha){
+            // the next two lines are swapped in the original binary
+            self->state = CWSPLASH_STATE_8; // what the fuck
+            ResetNativeObject(self, MenuControl_Create, MenuControl_Main);
+            return;
+        }
+    }
+    SetRenderBlendMode(RENDER_BLEND_NONE);
+    RenderRect(-SCREEN_CENTERX_F, SCREEN_CENTERY_F, 160.0, SCREEN_XSIZE_F, SCREEN_YSIZE_F, 0xFF, 0x90, 0x00, 0xFF);
+    SetRenderBlendMode(RENDER_BLEND_ALPHA);
+    RenderImage(0.0, 0.0, 160.0, 0.25, 0.25, 512.0, 256.0, 1024.0, 512.0, 0.0, 0.0, 255, self->textureID);
+    RenderRect(-SCREEN_CENTERX_F, SCREEN_CENTERY_F, 160.0, SCREEN_XSIZE_F, SCREEN_YSIZE_F, 0, 0, 0, self->rectAlpha);
+    return;
+}
+#endif

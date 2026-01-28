@@ -22,6 +22,20 @@ THE SOFTWARE.
 
 #include "fcaseopen.h"
 
+#include <stdlib.h>
+#include <string.h>
+
+#if defined(_MSC_VER)
+    #include <direct.h>
+    #define chdir _chdir
+#else
+    #include <unistd.h>
+#endif
+
+#include <dirent.h>
+#include <errno.h>
+
+
 #if !defined(_WIN32)
 #include <stdlib.h>
 #include <string.h>

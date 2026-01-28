@@ -35,10 +35,9 @@ void eventPauseMenuVisible(bool paused, int state)
         return;
     }
     if (state == 3){
-        tempGlobalVar = GetGlobalVariableByName("options.gameMode");
-        Engine.gameMode = ENGINE_RESETGAME; // wonder what Hunter was thinking when porting the HW Menu to V6
-        if (tempGlobalVar < 2){
-            Engine.gameMode = 7;
+        Engine.gameMode = ENGINE_RESETGAME;
+        if ((GetGlobalVariableByName("options.gameMode"))< 2){
+            Engine.gameMode = ENGINE_ENDGAME;
         }
         SetGlobalVariableByName("timeAttack.result", 1000000);
     }
@@ -50,20 +49,18 @@ void eventPauseMenuVisible(bool paused, int state)
                 ClearNativeObjects();
                 CreateNativeObject(RetroGameLoop_Create, RetroGameLoop_Main);
                 ResumeSound();
-                Engine.gameMode = 1;
+                Engine.gameMode = ENGINE_MAINGAME;
                 return;
             }
         return;
         }
         stageMode = 0;
         Engine.gameMode = 6;
-        tempGlobalVar = GetGlobalVariableByName("options.gameMode");
-        if (tempGlobalVar < 2){
-            tempGlobalVar = GetGlobalVariableByName("player.lives");
-            SetGlobalVariableByName("player.lives", tempGlobalVar - 1); //the decompiler output tempGlobalVar + -1, which is the exact thing
+        if ((GetGlobalVariableByName("options.gameMode")) < 2){
+            SetGlobalVariableByName("player.lives", (GetGlobalVariableByName("player.lives") - 1)); //the decompiler output tempGlobalVar + -1, which is the exact thing
         }
         if (activeStageList == 1){
-            if (Engine.gameType == GAME_SONICCD){
+          /*if (Engine.gameType == GAME_SONICCD){
                 checkpointName = "lampPostID";
             }
             else{
@@ -71,8 +68,9 @@ void eventPauseMenuVisible(bool paused, int state)
                 if (Engine.gameType != GAME_SONIC2){
                     checkpointName = "starPostID";
                 }
-            }
-        SetGlobalVariableByName(checkpointName, 0);
+            }*/
+            SetGlobalVariableByName("lampPostID", 0);
+            SetGlobalVariableByName("starPostID", 0);
         }
     ResetCurrentStageFolder();
     }
