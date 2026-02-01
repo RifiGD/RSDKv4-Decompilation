@@ -10,7 +10,12 @@ void RetroGameLoop_Main(void *objPtr);
 
 #if RETRO_USE_V6
 void eventPauseMenuVisible(bool paused, int state); // not sure about the name "state", best i could come up with based on the output
-void showPauseScreenJava(); //as much as im gonna get without decompiling the classes files in the apk
+void showPauseScreenJava(); // as much as im gonna get without decompiling the classes files in the apk
+
+// this function is actually never used by the engine, it's called by JNI
+// but it kind of relates to the other 2 functions above so imma declare it here
+bool restartBtnUnAvailable();
+
 #endif
 
 #endif // !NATIVE_RETROGAMELOOP_H

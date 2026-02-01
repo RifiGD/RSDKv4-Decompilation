@@ -15,7 +15,6 @@ void PlayerSelectScreen_Create(void *objPtr)
     SetStringToFont(self->labelPtr->text, strPlayerSelect, FONT_HEADING);
 
     SetStringToFont(self->textSonic, strSonic, FONT_TEXT);
-
     self->sonicX = (GetTextWidth(self->textSonic, FONT_TEXT, 0.2) * -0.5) - 88.0;
 
     SetStringToFont(self->textTails, strTails, FONT_TEXT);
@@ -26,9 +25,8 @@ void PlayerSelectScreen_Create(void *objPtr)
 
     self->meshPanel = LoadMesh("Data/Game/Models/Panel.bin", 255);
     SetMeshVertexColors(self->meshPanel, 0, 0, 0, 0xC0);
-#if !RETRO_USE_V6
+
     self->textureArrows    = LoadTexture("Data/Game/Menu/ArrowButtons.png", TEXFMT_RGBA4444);
-#endif
     self->texturePlayerSel = LoadTexture("Data/Game/Menu/PlayerSelect.png", TEXFMT_RGBA8888);
     self->backPressed      = false;
     self->flag             = true;

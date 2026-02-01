@@ -16,10 +16,6 @@ void InitPauseMenu()
 #endif
 
 #if RETRO_USE_V6
-//redefining because my compiler hates me
-int tempGlobalVar = 0;
-const char* checkpointName = nullptr;
-
 void showPauseScreenJava()
 {
     //it's Java sided, i'm not even gonna bother with this
@@ -60,15 +56,6 @@ void eventPauseMenuVisible(bool paused, int state)
             SetGlobalVariableByName("player.lives", (GetGlobalVariableByName("player.lives") - 1)); //the decompiler output tempGlobalVar + -1, which is the exact thing
         }
         if (activeStageList == 1){
-          /*if (Engine.gameType == GAME_SONICCD){
-                checkpointName = "lampPostID";
-            }
-            else{
-                checkpointName = "lampPostID";
-                if (Engine.gameType != GAME_SONIC2){
-                    checkpointName = "starPostID";
-                }
-            }*/
             SetGlobalVariableByName("lampPostID", 0);
             SetGlobalVariableByName("starPostID", 0);
         }
@@ -77,6 +64,36 @@ void eventPauseMenuVisible(bool paused, int state)
     CreateNativeObject(FadeScreen_Create, FadeScreen_Main);
     return;
 }
+
+bool restartBtnUnAvailable()
+{
+    // i usually dont put global variables in c++ variables like this
+    // but uhh... you'll see later why i did this
+    int lives = GetGlobalVariableByName("player.lives");
+    int scriptGameMode = GetGlobalVariableByName("options.gameMode");
+    int attractMode = GetGlobalVariableByName("options.attractMode");
+    int vsMode = GetGlobalVariableByName("options.vsMode");
+
+    // WHO THE FUCK WROTE THIS LOGIC AGHHHHH
+    if (Engine.gameType != GAME_SONICCD || ( (activeStageList & ~STAGELIST_REGULAR) != STAGELIST_BONUS && (activeStageList != STAGELIST_REGULAR || stageListPosition < 0x51) )) 
+    {
+        int value; // temporary
+
+        if (lives >= 2)
+            value = lives - 1;
+        else
+            value = scriptGameMode - 2;
+
+        if (value >= 0 && vsMode != 1 && attractMode != 1) {
+            return activeStageList == STAGELIST_PRESENTATION
+                || scriptGameMode == 2;
+        }
+    }
+
+    return true;
+}
+
+
 #endif
 
 void RetroGameLoop_Create(void *objPtr) { mixFiltersOnJekyll = Engine.useHighResAssets; }

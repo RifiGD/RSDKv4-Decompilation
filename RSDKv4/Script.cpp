@@ -5341,7 +5341,9 @@ void ProcessScript(int scriptCodeStart, int jumpTableStart, byte scriptEvent)
             }
 #endif
             case FUNC_LOADTEXTFILE: {
+            #if !RETRO_USE_V6
                 opcodeSize     = 0;
+            #endif
                 TextMenu *menu = &gameMenu[scriptEng.operands[0]];
 #if !RETRO_REV02
                 LoadTextFile(menu, scriptText, scriptEng.operands[2] != 0);
@@ -5349,7 +5351,7 @@ void ProcessScript(int scriptCodeStart, int jumpTableStart, byte scriptEvent)
 #if ! RETRO_USE_V6
                 LoadTextFile(menu, scriptText, false);
 #else
-                LoadTextFile(menu, scriptText, false);
+                LoadTextFile(menu, scriptText);
 #endif
 #endif
                 break;

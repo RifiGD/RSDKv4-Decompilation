@@ -222,6 +222,14 @@ void ProcessStageSelect()
                 gameMenu[0].selection2 -= 2;
 
             int count = 15;
+
+#if RETRO_USE_V6 || RETRO_USE_ORIGINAL_CODE
+            // now only start game and stage select, accurate to the dev menu
+            // added as original code as well since it isnt exclusive to v6
+            // it is just how the dev menu behaves on original releases
+            count = 10;
+#endif
+
 #if RETRO_USE_MOD_LOADER
             count += 2;
 #endif
@@ -604,7 +612,11 @@ void SetTextMenu(int sm)
             AddTextMenuEntry(&gameMenu[0], version);
             AddTextMenuEntry(&gameMenu[0], Engine.gameVersion);
 #ifdef RETRO_DEV_EXTRA
+#if !RETRO_USE_V6
             AddTextMenuEntry(&gameMenu[0], RETRO_DEV_EXTRA);
+#else
+            AddTextMenuEntry(&gameMenu[0], " ");
+#endif
 #else
             AddTextMenuEntry(&gameMenu[0], " ");
 #endif
@@ -615,8 +627,8 @@ void SetTextMenu(int sm)
             AddTextMenuEntry(&gameMenu[0], "START GAME");
             AddTextMenuEntry(&gameMenu[0], " ");
             AddTextMenuEntry(&gameMenu[0], "STAGE SELECT");
-#if !RETRO_USE_V6
-#if !RETRO_USE_ORIGINAL_CODE
+
+#if !RETRO_USE_ORIGINAL_CODE && !RETRO_USE_V6
             AddTextMenuEntry(&gameMenu[0], " ");
             AddTextMenuEntry(&gameMenu[0], "START MENU");
 #if RETRO_USE_MOD_LOADER
@@ -626,7 +638,7 @@ void SetTextMenu(int sm)
             AddTextMenuEntry(&gameMenu[0], " ");
             AddTextMenuEntry(&gameMenu[0], "EXIT GAME");
 #endif
-#endif
+
             gameMenu[0].alignment        = 2;
             gameMenu[0].selectionCount   = 2;
             gameMenu[0].selection1       = 0;

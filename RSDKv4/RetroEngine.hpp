@@ -4,6 +4,11 @@
 // Disables POSIX use c++ name blah blah stuff
 #pragma warning(disable : 4996)
 
+// Whether or not the HW Menus will use the version used in SEGA Classics (2018) application for Amazon Fire TV
+#ifndef RETRO_USE_V6
+#define RETRO_USE_V6 (1)
+#endif
+
 // Setting this to true removes (almost) ALL changes from the original code, the trade off is that a playable game cannot be built, it is advised to
 // be set to true only for preservation purposes
 #ifndef RETRO_USE_ORIGINAL_CODE
@@ -11,11 +16,12 @@
 #endif
 
 #ifndef RETRO_USE_MOD_LOADER
-#define RETRO_USE_MOD_LOADER (!RETRO_USE_ORIGINAL_CODE && 1)
+#define RETRO_USE_MOD_LOADER (!RETRO_USE_ORIGINAL_CODE && !RETRO_USE_V6 && 1)
 #endif
 
 #ifndef RETRO_USE_NETWORKING
-#define RETRO_USE_NETWORKING (!RETRO_USE_ORIGINAL_CODE && 1)
+//v6 smali code disables networking
+#define RETRO_USE_NETWORKING (!RETRO_USE_ORIGINAL_CODE && !RETRO_USE_V6 && 1)
 #endif
 
 // Forces all DLC flags to be disabled, this should be enabled in any public releases
@@ -202,7 +208,7 @@ typedef unsigned int uint;
 #endif
 #endif
 
-#define RETRO_USE_HAPTICS (1)
+#define RETRO_USE_HAPTICS (!RETRO_USE_V6 && 1)
 
 // NOTE: This is only used for rev00 stuff, it was removed in rev01 and later builds
 #if RETRO_PLATFORM <= RETRO_WP7
@@ -218,11 +224,6 @@ typedef unsigned int uint;
 #error Unspecified RETRO_GAMEPLATFORMID
 #endif
 
-#endif
-
-// Whether or not the HW Menus will use the version used in SEGA Classics (2018) application for Amazon Fire TV
-#ifndef RETRO_USE_V6
-#define RETRO_USE_V6 (1)
 #endif
 
 // Determines which revision to use (see defines below for specifics). Datafiles from REV00 and REV01 builds will not work on later revisions and vice versa.
@@ -412,7 +413,11 @@ public:
     bool nativeMenuFadeIn = false;
 
     bool trialMode        = false;
+#if !RETRO_USE_V6
     bool onlineActive     = true;
+#else
+    bool onlineActive     = false;
+#endif
     bool useHighResAssets = false;
 #if RETRO_USE_HAPTICS
     bool hapticsEnabled = true;
@@ -469,9 +474,19 @@ public:
     char gameWindowText[0x40];
     char gameDescriptionText[0x100];
 #ifdef DECOMP_VERSION
+#if !RETRO_USE_V6
     const char *gameVersion = DECOMP_VERSION;
 #else
+    const char *gameVersion  = "0.4.3";
+#endif
+
+#else
+#if !RETRO_USE_V6
     const char *gameVersion  = "1.3.3";
+#else
+    // Sega Classics App version
+    const char *gameVersion  = "0.4.3";
+#endif
 #endif
     const char *gamePlatform = nullptr;
 

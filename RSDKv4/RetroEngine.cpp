@@ -1266,7 +1266,7 @@ bool RetroEngine::LoadGameConfig(const char *filePath)
     nativeFunctionCount = 0;
     AddNativeFunction("SetAchievement", SetAchievement);
     AddNativeFunction("SetLeaderboard", SetLeaderboard);
-#if RETRO_USE_HAPTICS || !RETRO_USE_V6
+#if RETRO_USE_HAPTICS
     AddNativeFunction("HapticEffect", HapticEffect);
 #endif
     AddNativeFunction("Connect2PVS", Connect2PVS);
@@ -1276,15 +1276,19 @@ bool RetroEngine::LoadGameConfig(const char *filePath)
     AddNativeFunction("ReceiveEntity", ReceiveEntity);
     AddNativeFunction("ReceiveValue", ReceiveValue);
     AddNativeFunction("TransmitGlobal", TransmitGlobal);
+#if !RETRO_USE_V6
     AddNativeFunction("ShowPromoPopup", ShowPromoPopup);
+#endif
 
 #if RETRO_USE_V6
     AddNativeFunction("PlayVideo", PlayVideo);
 #endif
 
     // Introduced in the Sega Forever versions of S1 (3.9.0) and S2 (1.7.0)
+#if !RETRO_USE_V6
     AddNativeFunction("NativePlayerWaitingAds", NativePlayerWaitingAds);
     AddNativeFunction("NativeWaterPlayerWaitingAds", NativeWaterPlayerWaitingAds);
+#endif
 
 #if RETRO_REV03
     AddNativeFunction("NotifyCallback", NotifyCallback);
