@@ -16,7 +16,7 @@ void MenuControl_Create(void *objPtr)
     self->buttonFlags[self->buttonCount] = BUTTON_TIMEATTACK;
     self->buttonCount++;
 
-#if !RETRO_USE_V6 // remember to add back the !
+#if !RETRO_USE_V6
 #if RETRO_USE_MOD_LOADER
     int vsID = GetSceneID(STAGELIST_PRESENTATION, "2P VS");
     if (vsID != -1) {
