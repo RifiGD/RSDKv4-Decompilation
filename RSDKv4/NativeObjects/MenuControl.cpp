@@ -16,26 +16,26 @@ void MenuControl_Create(void *objPtr)
     self->buttonFlags[self->buttonCount] = BUTTON_TIMEATTACK;
     self->buttonCount++;
 
-#if RETRO_USE_MOD_LOADER
-    int vsID = GetSceneID(STAGELIST_PRESENTATION, "2P VS");
-    if (vsID != -1) {
-#else
-    if (Engine.gameType == GAME_SONIC2) {
-#endif
-        self->buttons[self->buttonCount]     = (NativeEntity_AchievementsButton *)CREATE_ENTITY(MultiplayerButton);
-        self->buttonFlags[self->buttonCount] = BUTTON_MULTIPLAYER;
-        self->buttonCount++;
-    }
+// #if RETRO_USE_MOD_LOADER
+//     int vsID = GetSceneID(STAGELIST_PRESENTATION, "2P VS");
+//     if (vsID != -1) {
+// #else
+//     if (Engine.gameType == GAME_SONIC2) {
+// #endif
+//         self->buttons[self->buttonCount]     = (NativeEntity_AchievementsButton *)CREATE_ENTITY(MultiplayerButton);
+//         self->buttonFlags[self->buttonCount] = BUTTON_MULTIPLAYER;
+//         self->buttonCount++;
+//     }
 
-    if (Engine.onlineActive) {
-        self->buttons[self->buttonCount]     = CREATE_ENTITY(AchievementsButton);
-        self->buttonFlags[self->buttonCount] = BUTTON_ACHIEVEMENTS;
-        self->buttonCount++;
+//     if (Engine.onlineActive) {
+//         self->buttons[self->buttonCount]     = CREATE_ENTITY(AchievementsButton);
+//         self->buttonFlags[self->buttonCount] = BUTTON_ACHIEVEMENTS;
+//         self->buttonCount++;
 
-        self->buttons[self->buttonCount]     = (NativeEntity_AchievementsButton *)CREATE_ENTITY(LeaderboardsButton);
-        self->buttonFlags[self->buttonCount] = BUTTON_LEADERBOARDS;
-        self->buttonCount++;
-    }
+//         self->buttons[self->buttonCount]     = (NativeEntity_AchievementsButton *)CREATE_ENTITY(LeaderboardsButton);
+//         self->buttonFlags[self->buttonCount] = BUTTON_LEADERBOARDS;
+//         self->buttonCount++;
+//     }
 
     self->buttons[self->buttonCount]     = (NativeEntity_AchievementsButton *)CREATE_ENTITY(OptionsButton);
     self->buttonFlags[self->buttonCount] = BUTTON_OPTIONS;
@@ -66,6 +66,16 @@ void MenuControl_Create(void *objPtr)
         button->y                               = (128.0 * sin) + 16.0;
         button->visible                         = button->z <= 288.0;
         offset += self->buttonIncline;
+    }
+
+    // didnt know which saveRAM value to use as the thing that checks this
+    // in the original this isnt handled by SGame but rather by the F2F file, which is impossible to do here
+    // thank you JD
+    if (saveRAM[2048] == false) {
+        self->shutdownDialog = CREATE_ENTITY(ShutdownDialogPanel);
+        SetStringToFont(self->shutdownDialog->title, strShutdownTitle, FONT_TEXT);
+        SetStringToFont(self->shutdownDialog->text, strShutdownMessage, FONT_TEXT);
+        self->state = MENUCONTROL_STATE_SHUTDOWNDIALOGWAIT;
     }
 
     PlayMusic(0, 0);
@@ -525,6 +535,18 @@ void MenuControl_Main(void *objPtr)
                 ExitGame();
                 self->dialogTimer = 50;
                 self->state       = MENUCONTROL_STATE_MAIN;
+            }
+            break;
+        }
+        case MENUCONTROL_STATE_SHUTDOWNDIALOGWAIT: {
+            if (self->shutdownDialog->selection == DLG_YES) {
+                // this is the more info button, obviously we cant open the url here lol
+                self->state = MENUCONTROL_STATE_MAIN;
+            }
+            else if (self->shutdownDialog->selection == DLG_OK || self->shutdownDialog->selection == DLG_NO) {
+                saveRAM[2048] = true;
+                WriteSaveRAMData();
+                self->state   = MENUCONTROL_STATE_MAIN;
             }
             break;
         }

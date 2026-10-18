@@ -45,4 +45,9 @@
 #if RETRO_USE_NETWORKING
 #include "MultiplayerHandler.cpp"
 #include "MultiplayerScreen.cpp"
+
+#include "DialogPanelTitle.cpp"
+#include "ReviveAds.cpp"
+
+#include "ShutdownDialogPanel.cpp"
 #endif

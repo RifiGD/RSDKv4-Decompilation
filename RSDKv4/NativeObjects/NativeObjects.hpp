@@ -35,6 +35,7 @@ extern ushort helpText[0x1000];
 #include "OptionsButton.hpp"
 #include "BackButton.hpp"
 #include "SegaIDButton.hpp"
+#include "ShutdownDialogPanel.hpp"
 #include "MenuControl.hpp"
 #include "SaveSelect.hpp"
 #include "PlayerSelectScreen.hpp"
@@ -54,5 +55,8 @@ extern ushort helpText[0x1000];
 #include "MultiplayerHandler.hpp"
 #include "MultiplayerScreen.hpp"
 #endif
+
+#include "DialogPanelTitle.hpp"
+#include "ReviveAds.hpp"
 
 #endif // !NATIVE_OBJECTS_H

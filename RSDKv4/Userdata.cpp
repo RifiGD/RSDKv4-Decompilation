@@ -27,6 +27,9 @@ bool vsPlaying   = false;
 
 int sendCounter = 0;
 
+bool isWaitingAds = false;
+bool isWaitingWaterAds = false;
+
 #if RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_LINUX
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -1172,6 +1175,11 @@ void ShowWebsite(int websiteID)
         case 1: PrintLog("Showing website: \"%s\" (%d)", "http://www.sega.com/legal", websiteID); break;
     }
 }
+
+//Fuck the L.
+void NativePlayerWaitingAds() { ReviveAds_Enter(); }
+
+void NativeWaterPlayerWaitingAds() { ReviveAdsWater_Enter(); }
 
 #if RETRO_REV03
 enum NotifyCallbackIDs {

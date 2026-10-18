@@ -10,7 +10,8 @@ enum MenuControlStates {
     MENUCONTROL_STATE_ENTERSUBMENU,
     MENUCONTROL_STATE_SUBMENU,
     MENUCONTROL_STATE_EXITSUBMENU,
-    MENUCONTROL_STATE_DIALOGWAIT
+    MENUCONTROL_STATE_DIALOGWAIT,
+    MENUCONTROL_STATE_SHUTDOWNDIALOGWAIT,
 };
 enum MenuControlInputStates {
     MENUCONTROL_STATEINPUT_CHECKTOUCH,
@@ -45,6 +46,7 @@ struct NativeEntity_MenuControl : NativeEntityBase {
     int unused13;
     NativeEntity_DialogPanel *dialog;
     int dialogTimer;
+    NativeEntity_ShutdownDialogPanel *shutdownDialog;
 };
 
 void MenuControl_Create(void *objPtr);

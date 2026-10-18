@@ -57,6 +57,7 @@ set(RETRO_FILES
     RSDKv4/NativeObjects/CWSplash.cpp
     RSDKv4/NativeObjects/CreditText.cpp
     RSDKv4/NativeObjects/DialogPanel.cpp
+    RSDKv4/NativeObjects/DialogPanelTitle.cpp
     RSDKv4/NativeObjects/FadeScreen.cpp
     RSDKv4/NativeObjects/InstructionsScreen.cpp
     RSDKv4/NativeObjects/LeaderboardsButton.cpp
@@ -75,10 +76,12 @@ set(RETRO_FILES
     RSDKv4/NativeObjects/PushButton.cpp
     RSDKv4/NativeObjects/RecordsScreen.cpp
     RSDKv4/NativeObjects/RetroGameLoop.cpp
+    RSDKv4/NativeObjects/ReviveAds.cpp
     RSDKv4/NativeObjects/SaveSelect.cpp
     RSDKv4/NativeObjects/SegaIDButton.cpp
     RSDKv4/NativeObjects/SegaSplash.cpp
     RSDKv4/NativeObjects/SettingsScreen.cpp
+    RSDKv4/NativeObjects/ShutdownDialogPanel.cpp
     RSDKv4/NativeObjects/StaffCredits.cpp
     RSDKv4/NativeObjects/StartGameButton.cpp
     RSDKv4/NativeObjects/SubMenuButton.cpp

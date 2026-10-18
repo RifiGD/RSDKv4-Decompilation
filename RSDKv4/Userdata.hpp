@@ -111,6 +111,9 @@ extern int disableFocusPause;
 extern int disableFocusPause_Config;
 #endif
 
+extern bool isWaitingAds;
+extern bool isWaitingWaterAds;
+
 inline int GetGlobalVariableByName(const char *name)
 {
     for (int v = 0; v < globalVariablesCount; ++v) {
@@ -210,9 +213,8 @@ void ShowOnlineSignIn();
 void ShowWebsite(int websiteID);
 
 // In the Sega Forever versions of S1 & S2, there's a feature where you can choose to watch an ad to continue from a Game Over
-// We obviously can't do that here, so let's just take the L
-inline void NativePlayerWaitingAds() { SetGlobalVariableByName("waitingAds.result", 2); }
-inline void NativeWaterPlayerWaitingAds() { SetGlobalVariableByName("waitingAds.water", 2); }
+void NativePlayerWaitingAds();
+void NativeWaterPlayerWaitingAds();
 
 #if RETRO_REV03
 void NotifyCallback(int *callback, int *param1, int *param2, int *param3);

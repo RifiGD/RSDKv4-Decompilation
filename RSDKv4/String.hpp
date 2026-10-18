@@ -37,6 +37,8 @@ extern ushort *strExit;
 extern ushort *strDevMenu;
 extern ushort *strRestartMessage;
 extern ushort *strExitMessage;
+extern ushort *strReviveAds;
+extern ushort *strGameOver;
 extern ushort *strNSRestartMessage;
 extern ushort *strNSExitMessage;
 extern ushort *strExitGame;
@@ -70,6 +72,10 @@ extern ushort *strHelpText5;
 extern ushort *strVersionName;
 extern ushort *strPrivacy;
 extern ushort *strTerms;
+extern ushort *strShutdownTitle;
+extern ushort *strShutdownMessage;
+extern ushort *strMoreInfo;
+extern ushort *strOK;
 
 extern int stageStrCount;
 

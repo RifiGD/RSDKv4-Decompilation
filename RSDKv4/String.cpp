@@ -27,6 +27,8 @@ ushort *strExit             = NULL;
 ushort *strDevMenu          = NULL;
 ushort *strRestartMessage   = NULL;
 ushort *strExitMessage      = NULL;
+ushort *strReviveAds        = NULL;
+ushort *strGameOver         = NULL;
 ushort *strNSRestartMessage = NULL;
 ushort *strNSExitMessage    = NULL;
 ushort *strExitGame         = NULL;
@@ -60,6 +62,10 @@ ushort *strHelpText5     = NULL;
 ushort *strVersionName   = NULL;
 ushort *strPrivacy       = NULL;
 ushort *strTerms         = NULL;
+ushort *strShutdownTitle = NULL;
+ushort *strShutdownMessage = NULL;
+ushort *strMoreInfo = NULL;
+ushort *strOK = NULL;
 
 int stageStrCount = 0;
 
@@ -290,6 +296,10 @@ void InitLocalizedStrings()
     strDevMenu        = ReadLocalizedString("DevMenu", "en", "Data/Game/StringList.txt");
     strRestartMessage = ReadLocalizedString("RestartMessage", langStr, "Data/Game/StringList.txt");
     strExitMessage    = ReadLocalizedString("ExitMessage", langStr, "Data/Game/StringList.txt");
+
+    strReviveAds      = ReadLocalizedString("ReviveAds", langStr, "Data/Game/StringList.txt");
+    strGameOver       = ReadLocalizedString("GameOver", langStr, "Data/Game/StringList.txt");
+    
     if (Engine.language == RETRO_JP) {
         strNSRestartMessage = ReadLocalizedString("NSRestartMessage", "ja", "Data/Game/StringList.txt");
         strNSExitMessage    = ReadLocalizedString("NSExitMessage", "ja", "Data/Game/StringList.txt");
@@ -359,6 +369,11 @@ void InitLocalizedStrings()
     // strControlMethod = ReadLocalizedString("ControlMethod", langStr, "Data/Game/StringList.txt");
     // strSwipeAndTap   = ReadLocalizedString("SwipeAndTap", langStr, "Data/Game/StringList.txt");
     // strVirtualDPad   = ReadLocalizedString("VirtualDPad", langStr, "Data/Game/StringList.txt");
+
+    strShutdownTitle = ReadLocalizedString("ShutdownTitle",langStr,"Data/Game/StringList.txt");
+    strShutdownMessage = ReadLocalizedString("ShutdownMessage",langStr,"Data/Game/StringList.txt");
+    strMoreInfo = ReadLocalizedString("MoreInfo",langStr,"Data/Game/StringList.txt");
+    strOK = ReadLocalizedString("OK",langStr,"Data/Game/StringList.txt");
 
     ReadCreditsList("Data/Game/CreditsMobile.txt");
 }
